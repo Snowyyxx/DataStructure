@@ -1,5 +1,5 @@
 /*
-    Stack is a concept of Data strucures based on LIFO lAST IN FIRST OUT AND IMPLEMENT THROUGH LISTS!
+    Stack is a concept of Data strucures based on LIFO:lAST IN FIRST OUT AND IMPLEMENT THROUGH LISTS!
     3 (top) --> 2 --> 1 (bottom)
 */
 
