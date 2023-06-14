@@ -1,91 +1,172 @@
 #include<iostream>
-//Balancing Factor (for every node is different) = height of left subtree - height of right subtree = {-1,0,1} are allowed
 
 class Node{
     public:
-    int data;
+    int key;
     Node * left;
     Node * right;
+    int height;
 
-    Node(int data){
-        this->data =data;
-        left = right =nullptr;
-    }
     Node(){
-        left = right =nullptr;
+        left = right = nullptr;
     }
 
+    Node(int key){
+        this->key =key;
+        left = right = nullptr;
+    }
+    
 };
 
-class AVLTree{
-    private:
+class  AVLTree{
     Node * root_node;
-    void InsertNode(int data, Node *& node){ // reference to a pointer of a node!
+    
+    int CalculateHeight(Node * node){
+        
+        if(node==nullptr){
+            return 0;
+        }
+        return 1+std::max(CalculateHeight(node->left),CalculateHeight(node->right));
+
+    }
+
+    int BalancingFactor(Node * node){
+        return CalculateHeight(node->left)-CalculateHeight(node->right);
+    }
+    
+    Node * rotateRight(Node *x){
+        Node * y = x->left;
+        Node * z = y->left;
+        Node * T2 = y->right;
+        Node * T3 = x->right;
+        //y->left = z;
+        y->right = x;
+        x->left =T2;
+        //x->right =T3;
+
+        y->height = CalculateHeight(y);
+        x->height = CalculateHeight(x);
+
+        return y;
+
+    }
+
+    Node * rotateLeft(Node * x){
+            
+        Node* y = x->right;
+        Node* z = y->right;
+        Node * T2 = y->left;
+
+        //Rotation:
+        y->left =x;
+        y->right = z;
+        x->right=T2;
+
+        // Update heights
+        x->height = CalculateHeight(x);
+        y->height = CalculateHeight(y);
+
+        return y;
+    }
+    
+
+    Node * Create_Node(Node * node, int key){
         if(node == nullptr){
-            node = new Node(data);
+            Node * new_node = new Node(key);
+            node = new_node;
+            return node;
         }
-        else if (data < node->data){
-            InsertNode(data,node->left);
+        else if (key < node->key){
+            node->left =  Create_Node(node->left,key);
         }
-        else if(data > node->data){
-            InsertNode(data,node->right);
+        else if(key > node->key){
+            node->right= Create_Node(node->right,key);
         }
+        else if(key == node->key){
+            std::cout<<"duplicte keys not allowed in BST!"<<std::endl;
+            return node;
+        }
+        // update height of ancestor node!
+        node->height = CalculateHeight(node);
+        
+        // check the balance factor and do roations if needed!
+        int balance_factor = BalancingFactor(node);
+
+        // bf = {-1,0,1}
+        // 4 Rotations : left-left , right-right ,left-right , right-left
+        //left-left:
+        if(balance_factor>1 && key<node->left->key) // balanc factor cant be greater than 1 when only 2 nodes in AVL! 
+        {
+            //      A                B
+            //     / \              / \
+            //    B   T3    ->     C   A
+            //   / \                  / \
+            //  C   T2               T2  T3
+            return rotateRight(node);
+
+        }
+        // left-right
+        else if (balance_factor>1 && key>node->left->key){
+
+//      x                x                z
+//     / \              / \              / \
+//    y   T2    ->     z   T2    ->     y   x
+//   / \              /               /     \
+//  T3  z            y              T3       T2
+//                  /
+//                 T3      
+        node->left = rotateLeft(node->left);
+        node = rotateRight(node);
+
+        }
+        // right-right
+        else if(balance_factor<-1 && key>node->right->key){
+    //   A                B
+    //  / \              / \
+    // T1  B     ->     A   C
+    //    / \          / \
+    //   T2  C        T1  T2
+        node = rotateLeft(node);
+
+        }
+        //right-left;
+        else if(balance_factor<-1 && key<node->right->key){
+            node->right = rotateRight(node->right);
+            node = rotateLeft(node);
+        }
+
+        return node;
     }
 
-    void InorderTraversal (Node * node){
+    void Inorder(Node * node){
         if(node!=nullptr){
-            InorderTraversal(node->left);
-            std::cout<<node->data<<",";
-            InorderTraversal(node->right);
+            Inorder(node->left);
+            std::cout<<node->key<<", ";
+            Inorder(node->right);
         }
-    }
-
-    void PreorderTraversal(Node * node){
-        static int count = 0 ;
-        Node * dummy_node;
-        if(count ==0 ){
-            dummy_node = node;
-            std::cout<<node->data<<",";
-            count++;
-            PreorderTraversal(node->left);
-        }
-
-        else if(node!=dummy_node&&node!=nullptr){
-            PreorderTraversal(node->left);
-            std::cout<<node->data<<",";
-            PreorderTraversal(node->right);
-        }
-
     }
 
     public:
-
-    void Insert(int data){
-        InsertNode(data,root_node);
+    void Insert(int key){
+        root_node  = Create_Node(root_node,key);
     }
 
-    void Inorder(){
-        InorderTraversal(root_node);
-        std::cout<<std::endl;
+    void InorderTransversal(){
+        Inorder(root_node);
     }
-
     AVLTree(){
         root_node = nullptr;
     }
 
-    void Preorder(){
-        PreorderTraversal(root_node);
-        std::cout<<std::endl;
-    }
 
 };
 
 
-int main (){
-    AVLTree tree;
-    for(int i =0;i<10;i++){
-        tree.Insert(i);
-    }
-    tree.Inorder();
-    tree.Preorder();
+int main(){
+AVLTree tree;
+tree.Insert(5);
+tree.Insert(3);
+tree.Insert(5);  // Duplicate key
+tree.Insert(2);
+tree.InorderTransversal();  // Expected output: 2, 3, 5
 }
