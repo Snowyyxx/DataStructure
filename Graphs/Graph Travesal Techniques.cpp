@@ -40,27 +40,27 @@ class Graph{
     }
 
     void BreadthFirstSearch(int start_vertex=0){
-        std::vector<bool> Visited(NumberOfVertices,false);
-        std::queue<int>Q;
+     
+     std::vector<bool>Visited(NumberOfVertices,false);
+     std::queue<int>Q;
 
-        Q.push(start_vertex);
-        Visited[start_vertex]=true;
+     Visited[start_vertex]=true;
+     Q.push(start_vertex);
 
-        while(!Q.empty()){
-            int current_index = Q.front();
-            Q.pop();
-            std::cout<<current_index<<",";
-            for(auto i = AdjList[current_index].begin();i!=AdjList[current_index].end();++i){
-                if(Visited[*i]==false){
-                    Q.push(*i);
-                    Visited[*i]=true;
-                }
+     while(!Q.empty()){
+        int current_value = Q.front();
+        Q.pop();
+        std::cout<<current_value<<",";
+        for(auto i = AdjList[current_value].begin();i!=AdjList[current_value].end();++i){
+            if(Visited[*i]==false){
+            Q.push(*i);
+            Visited[*i]=true;
             }
         }
+     }
+
 
     }
-
-
 };
 
 int main(){
