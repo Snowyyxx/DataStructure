@@ -57,27 +57,24 @@ class Graph{
         std::vector<bool>Visited(NumberVertices,false);
         std::queue<int>Q;
 
-        Visited[start_index]=true;
         Q.push(start_index);
+        Visited[start_index]=true;
 
         while(!Q.empty()){
-            int current_value = Q.front();
+            int dummy = Q.front();
             Q.pop();
-            std::cout<<current_value<<",";
-
-            for(int j =0;j<NumberVertices;j++){
-                if(AdjMatrix[current_value][j]==1&&!Visited[j]){                
-                    Q.push(j);
-                    Visited[j]=true;
+            std::cout<<dummy<<",";    
+            for(int i = 0;i<NumberVertices;i++){
+                if(AdjMatrix[dummy][i]==1){
+                    if(Visited[i]==false){
+                        Visited[i]=true;
+                        Q.push(i);
+                    }
                 }
             }
 
         }
-
-
     }
-
-
 };
 
 
