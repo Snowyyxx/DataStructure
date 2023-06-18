@@ -30,8 +30,8 @@ class Graph{
         std::vector<int>Shortest_Distance_from_start_vertex(NumVertices,INT_MAX);
         std::set<std::pair<int,int>>Set;
 
-        Set.insert({0,start_vertex});
-        Shortest_Distance_from_start_vertex[start_vertex]=0; // (distance,vertex)
+        Set.insert({0,start_vertex});// (distance,vertex)
+        Shortest_Distance_from_start_vertex[start_vertex]=0;
 
         while(!Set.empty()){
             int new_vertex = (*Set.begin()).second;
@@ -47,8 +47,6 @@ class Graph{
                     }
                 }
             }
-
-
         }
 
         //printing distances:
