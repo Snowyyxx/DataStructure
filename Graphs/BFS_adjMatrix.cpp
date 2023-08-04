@@ -10,7 +10,8 @@ class Graph{
 
     Graph(int NumberVertices){
         this->NumberVertices =NumberVertices;
-        AdjMatrix = std::vector<std::vector<int>>(NumberVertices,std::vector<int>(NumberVertices,0));
+        AdjMatrix = std::vector<std::vector<int>>(NumberVertices,std::vector<int>(NumberVertices,0)); 
+// std::vector<std::vector<int>>AdjMatrix = std::vector<std::vector<int>>(NumberOfVertices,std::vector<int>(NumberOfVertices,0))
     }
 
     void Insert(int x,int y){

@@ -29,34 +29,23 @@ class Graph{
     }
 
     void Dijkstra(int start_index=0){
+  
         std::vector<int>ShortestDistanceFromStartIndex(NumVertices,INT_MAX);
-        std::priority_queue<std::pair<int,int>,std::vector<std::pair<int,int>>,std::greater<std::pair<int,int>>>Q; // distance,node
-
-        Q.push({0,start_index});
         ShortestDistanceFromStartIndex[start_index]=0;
+        std::priority_queue<std::pair<int,int>,std::vector<std::pair<int,int>>,std::greater<std::pair<int,int>>>Q;
+        Q.push({0,start_index}); // distance,node!
 
         while(!Q.empty()){
-
             int current_index = Q.top().second;
             Q.pop();
 
-            for(auto i = 0;i<NumVertices;i++){
-                if(AdjMatrix[current_index][i]!=-1){
-                    int potential_distance = ShortestDistanceFromStartIndex[current_index]+AdjMatrix[current_index][i];
-                    if(potential_distance<ShortestDistanceFromStartIndex[i]){
-                        ShortestDistanceFromStartIndex[i]=potential_distance;
-                        Q.push({potential_distance,i});
-                    }
+            if(AdjMatrix[start_index][current_index]!=-1){
+                int potential_distance = ShortestDistanceFromStartIndex[current_index]+AdjMatrix[start_index][current_index];
+                if(potential_distance<INT_MAX){
+                    
                 }
             }
 
-        }
-
-        for(auto j =0;j<NumVertices;j++){
-            if(ShortestDistanceFromStartIndex[j]!=INT_MAX){
-                std::cout<<"Minimum distace of "<<j<<" from "<<start_index<< " is:"<<ShortestDistanceFromStartIndex[j]<<std::endl ;
-        }
-        
         }
 
     }
